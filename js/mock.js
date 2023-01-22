@@ -33,7 +33,7 @@ const prices = {
   max: 100000,
 };
 
-const types = ['palace', 'flat', 'house', 'bungalowhotel'];
+const types = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
 
 const roomsQuantity = {
   min: 1,
@@ -57,10 +57,18 @@ const photosList = [
 ]
 
 const location = {
-  MIN_LATITUDE: 35.65,
-  MAX_LATITUDE: 35.70,
-  MIN_LONGITUDE: 139.70,
-  MAX_LONGITUDE: 139.80,
+  MIN_LATITUDE: 35.65000,
+  MAX_LATITUDE: 35.70000,
+  MIN_LONGITUDE: 139.70000,
+  MAX_LONGITUDE: 139.80000,
+}
+
+const apart = {
+  flat: 'Квартира',
+  bungalow: 'Бунгало',
+  house: 'Дом',
+  palace: 'Дворец',
+  hotel: 'Отель',
 }
 
 function createAuthorData(index) {
@@ -94,7 +102,7 @@ function createOffer() {
     guests: getPositiveRandomInteger(guestsQuantity.min, guestsQuantity.max),
     checkin: getRandomArrayElement(checkinTime),
     checkout: getRandomArrayElement(checkoutTime),
-    features: featuresList.slice(0, getPositiveRandomInteger(0, featuresList.length)),
+    features: featuresList.slice(0, getPositiveRandomInteger(0, featuresList.length )),
     description: getRandomArrayElement(descriptionTitles),
     photos: photosList.slice(0, getPositiveRandomInteger(0, photosList.length)),
   }
@@ -108,10 +116,6 @@ function createDataObject() {
   }
 }
 
-const data = [];
+const data = createDataObject();
 
-for (let i = 1; i <= 10; i++) {
-  data.push(createDataObject())
-}
-
-export {data};
+export {data, apart}

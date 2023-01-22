@@ -1,1 +1,2 @@
-import { data } from "./mock.js";
+import "./render-data.js"
+import { contentDisable,contentEnable } from "./state.js"
