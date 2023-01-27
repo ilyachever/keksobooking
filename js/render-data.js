@@ -1,4 +1,5 @@
-import { data, apart } from "./mock.js";
+import { data } from "./mock.js";
+import { TYPES } from "./util.js";
 
 // Found and create card
 const card = document.getElementById('card').content;
@@ -31,7 +32,7 @@ offerAvatar.src = isOk(data.author.avatar, offerAvatar)
 
 // Utils
 function getApart(item) {
-  if (apart[item]) return apart[item];
+  if (TYPES[item].ru) return TYPES[item].ru;
 }
 
 function getFeatures(features) {

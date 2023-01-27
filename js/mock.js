@@ -1,4 +1,4 @@
-import { getPositiveRandomInteger, getPositiveRandomFloat, getPositiveRandomUniqueInteger, getRandomArrayElement } from "./util.js";
+import { getPositiveRandomInteger, getPositiveRandomFloat, getPositiveRandomUniqueInteger, getRandomArrayElement, TYPES } from "./util.js";
 
 const userIdValues = {
   MIN: 1,
@@ -63,14 +63,6 @@ const location = {
   MAX_LONGITUDE: 139.80000,
 }
 
-const apart = {
-  flat: 'Квартира',
-  bungalow: 'Бунгало',
-  house: 'Дом',
-  palace: 'Дворец',
-  hotel: 'Отель',
-}
-
 function createAuthorData(index) {
   return {
     avatar: `img/avatars/user${index.toString().padStart(2, '0')}.png`,
@@ -118,4 +110,4 @@ function createDataObject() {
 
 const data = createDataObject();
 
-export {data, apart}
+export {data}

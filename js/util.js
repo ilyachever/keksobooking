@@ -40,4 +40,27 @@ function getRandomArrayElement(array) {
   return array[getPositiveRandomInteger(0, array.length - 1)];
 }
 
-export {getPositiveRandomInteger, getPositiveRandomFloat, getPositiveRandomUniqueInteger, getRandomArrayElement};
+const TYPES = {
+  bungalow: {
+    ru: 'Бунгало',
+    minPrice: 0,
+  },
+  flat: {
+    ru: 'Квартира',
+    minPrice: 1000,
+  },
+  hotel: {
+    ru: 'Отель',
+    minPrice: 3000,
+  },
+  house: {
+    ru: 'Дом',
+    minPrice: 5000,
+  },
+  palace: {
+    ru: 'Дворец',
+    minPrice: 10000,
+  },
+}
+
+export {getPositiveRandomInteger, getPositiveRandomFloat, getPositiveRandomUniqueInteger, getRandomArrayElement, TYPES};
