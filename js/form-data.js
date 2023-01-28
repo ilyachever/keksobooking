@@ -71,17 +71,21 @@ function onCapacityChange() {
 }
 
 function setRoomsErrorMessage() {
-  if (!(formRoomAmount.value === '100') && formRoomCapacity.value === '0') {
-    return `Не для гостей предназначено лишь 100 комнат`;
+  if (formRoomAmount.value === '100' && !(formRoomCapacity.value === '0')) {
+    return `100 комнат не предназначены для гостей`;
+  } else if(!(formRoomAmount.value === '100') && formRoomCapacity.value === '0') {
+    return ``
   } else {
     return 'Слишком мало комнат для такого количества гостей';
   }
 }
 
 function setGuestsErrorMessage() {
-  if (!(formRoomAmount.value === '100') && formRoomCapacity.value === '0') {
-    return ``;
-  } else {
+  if (formRoomAmount.value === '100' && !(formRoomCapacity.value === '0')) {
+    return ``
+  } else if(!(formRoomAmount.value === '100') && formRoomCapacity.value === '0') {
+    return `Не для гостей предназначено 100 комнат`;
+  }  else {
     return 'Слишком много гостей для такого количества комнат';
   }
 }
