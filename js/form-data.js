@@ -23,15 +23,30 @@ formAddress.readOnly = true;
 
 // ========== Тип жилья ==========
 
+
 function setPrice() {
   let minPrice = TYPES[this.value].minPrice;
 
   formPrice.min = minPrice;
   formPrice.placeholder = minPrice;
-  formPrice.dataset.pristineMinMessage = `Минимальная цена за ночь: ${formPrice.min}`;
 }
 
+function checkPrice(value) {
+  return value && !(value < 0) && parseInt(value) >= parseInt(formPrice.min);
+}
+
+function setPriceErrorMessage() {
+  return `Минимальная цена за ночь: ${formPrice.min}`;
+}
+
+function onPriceChange() {
+  pristine.validate(formPrice)
+}
+
+pristine.addValidator(formPrice, checkPrice, setPriceErrorMessage, 2);
+
 formType.addEventListener('change', setPrice);
+formPrice.addEventListener('change', onPriceChange)
 
 // ========== Время заезда и выезда ==========
 
