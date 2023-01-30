@@ -108,6 +108,6 @@ function createDataObject() {
   }
 }
 
-const data = createDataObject();
+createDataObject();
 
-export {data}
+export { createDataObject }
