@@ -21,6 +21,10 @@ const pristine = new Pristine(form,
 
 formAddress.readOnly = true;
 
+function setAddressCoordinates(coor) {
+  formAddress.value = `${coor.lat}, ${coor.lng}`;
+}
+
 // ========== Тип жилья ==========
 
 
@@ -40,7 +44,7 @@ function setPriceErrorMessage() {
 }
 
 function onPriceChange() {
-  pristine.validate(formPrice)
+  pristine.validate(formPrice);
 }
 
 pristine.addValidator(formPrice, checkPrice, setPriceErrorMessage, 2);
@@ -69,9 +73,6 @@ const capacityOptions = {
   3: ['1', '2', '3'],
   100: ['0'],
 }
-
-pristine.addValidator(formRoomAmount, setRoomsCapacity, setRoomsErrorMessage);
-pristine.addValidator(formRoomCapacity,setRoomsCapacity, setGuestsErrorMessage);
 
 function setRoomsCapacity() {
   return capacityOptions[formRoomAmount.value].includes(formRoomCapacity.value);
@@ -105,6 +106,9 @@ function setGuestsErrorMessage() {
   }
 }
 
+pristine.addValidator(formRoomAmount, setRoomsCapacity, setRoomsErrorMessage);
+pristine.addValidator(formRoomCapacity,setRoomsCapacity, setGuestsErrorMessage);
+
 formRoomAmount.addEventListener('change', onRoomsChange);
 formRoomCapacity.addEventListener('change', onCapacityChange);
 
@@ -121,3 +125,5 @@ form.addEventListener('submit', (e) => {
     console.log('Нельзя отправлять')
   }
 });
+
+export { setAddressCoordinates };
