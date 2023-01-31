@@ -1,8 +1,10 @@
-import { contentDisable, contentEnable } from "./state.js"
+import { contentEnable } from "./state.js"
 import { setAddressCoordinates } from "./form-data.js";
 import renderCard from "./card.js";
 
 const mapContainer = document.querySelector('#map-canvas');
+
+// Настройки по умолчанию
 
 const DEFAULT_CITY = {
   lat: 35.69034,
@@ -10,6 +12,8 @@ const DEFAULT_CITY = {
 };
 
 const DEFAULT_ZOOM = 10;
+
+const DEFAULT_ROUND = 5;
 
 const ICON_MAIN = L.icon({
   iconUrl: '../img/main-pin.svg',
@@ -35,6 +39,8 @@ const openStreetMap = {
 // ========== Настройки карты ==========
 const map = L.map(mapContainer);
 
+// Добавление карты
+
 function addMap() {
   map
     .on('load', contentEnable, setAddressCoordinates(DEFAULT_CITY))
@@ -42,23 +48,25 @@ function addMap() {
 
   // openStreetMap
   L.tileLayer(openStreetMap.url, openStreetMap.settings).addTo(map);
-
-  // Главная метка
-  const mainMarker = L.marker(
-    DEFAULT_CITY,
-    {
-      draggable: true,
-      icon: ICON_MAIN,
-    },
-  ).addTo(map);
-  mainMarker
-    .addTo(map)
-    .on('moveend', onCoordinatesChange);
 }
 
-addMap()
-
 // ========== Настройки отображения меток ==========
+
+// Главная метка
+
+const mainMarker = L.marker(
+  DEFAULT_CITY,
+  {
+    draggable: true,
+    icon: ICON_MAIN,
+  },
+)
+
+mainMarker
+  .addTo(map)
+  .on('moveend', onCoordinatesChange);
+
+// Метки объявлений
 
 const defaultMarkerGroup = L.layerGroup().addTo(map)
 
@@ -78,12 +86,27 @@ function setMarkers(data) {
     })
 }
 
+function deleteMarkerGroup(markerGroup) {
+  markerGroup.clearLayers();
+}
+
+// ========== Настройки карты ==========
+
+// Сброс карты
+
+function resetMap() {
+  map.setView(DEFAULT_CITY, DEFAULT_ZOOM);
+  mainMarker.setLatLng(DEFAULT_CITY);
+  document.querySelector('#address').placeholder = `${DEFAULT_CITY.lat}, ${DEFAULT_CITY.lng}`;
+  deleteMarkerGroup(defaultMarkerGroup);
+}
+
 // ========== Дополнительные функции ==========
 
 function onCoordinatesChange(e) {
   let { lat, lng } = e.target.getLatLng();
-  lat = +lat.toFixed(5);
-  lng = +lng.toFixed(5);
+  lat = +lat.toFixed(DEFAULT_ROUND);
+  lng = +lng.toFixed(DEFAULT_ROUND);
 
   const currentCoordinates = {
     lat,
@@ -92,3 +115,5 @@ function onCoordinatesChange(e) {
 
   setAddressCoordinates(currentCoordinates);
 }
+
+export { addMap, setMarkers, resetMap }
