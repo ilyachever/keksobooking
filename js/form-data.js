@@ -19,8 +19,6 @@ const pristine = new Pristine(form,
 
 // ========== Адресс ==========
 
-formAddress.readOnly = true;
-
 function setAddressCoordinates(coor) {
   formAddress.value = `${coor.lat}, ${coor.lng}`;
 }
