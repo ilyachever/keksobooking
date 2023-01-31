@@ -3,6 +3,7 @@ import { TYPES } from "./util.js";
 const form = document.querySelector('.ad-form');
 const formType = form.querySelector('#type');
 const formPrice = form.querySelector('#price');
+const formPriceSlider = form.querySelector('.ad-form__slider');
 const formAddress = form.querySelector('#address');
 const formTimeIn = form.querySelector('#timein');
 const formTimeOut = form.querySelector('#timeout');
@@ -19,12 +20,11 @@ const pristine = new Pristine(form,
 
 // ========== Адресс ==========
 
-function setAddressCoordinates(coor) {
-  formAddress.value = `${coor.lat}, ${coor.lng}`;
+function setAddressCoordinates(coordinates) {
+  formAddress.value = `${coordinates.lat}, ${coordinates.lng}`;
 }
 
-// ========== Тип жилья ==========
-
+// ========== Тип жилья, Цена за ночь ==========
 
 function setPrice() {
   let minPrice = TYPES[this.value].minPrice;
@@ -49,6 +49,35 @@ pristine.addValidator(formPrice, checkPrice, setPriceErrorMessage, 2);
 
 formType.addEventListener('change', setPrice);
 formPrice.addEventListener('change', onPriceChange)
+
+// Слайдер
+
+noUiSlider.create(formPriceSlider, {
+  range: {
+    min: 0,
+    max: 100000,
+  },
+  start: formPrice.min,
+  step: 1,
+  connect: 'lower',
+  format: {
+    to: function(value) {
+      return value.toFixed(0);
+    },
+    from: function (value) {
+      return value;
+    },
+  }
+});
+
+formPriceSlider.noUiSlider.on('update', () => {
+  formPrice.value = formPriceSlider.noUiSlider.get();
+  pristine.validate(formPrice);
+})
+
+formPrice.addEventListener('input', function() {
+  formPriceSlider.noUiSlider.set([formPrice.value, null])
+})
 
 // ========== Время заезда и выезда ==========
 
