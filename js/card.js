@@ -37,8 +37,9 @@ function renderCard({author, offer}) {
   }
 
   function getFeatures(features) {
-    if (!features.length) {
+    if (!features) {
       offerFeaturesContainer.remove();
+      return;
     }
 
     const modifiers = features.map((item) => `popup__feature--${item}`);
@@ -53,8 +54,9 @@ function renderCard({author, offer}) {
   }
 
   function getPhotos(photos) {
-    if (!photos.length) {
+    if (!photos) {
       offerPhotosContainer.remove();
+      return;
     }
 
     const photosList = photos.map((photo) => `<img src=${photo} class="popup__photo" width="45" height="40" alt="Фотография жилья">`)
