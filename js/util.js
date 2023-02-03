@@ -77,21 +77,6 @@ const TYPES = {
   },
 }
 
-const DEFAULT_FIELDS_VALUES = {
-  title: '',
-  type: 'flat',
-  price: '1000',
-  timeIn: '12:00',
-  timeOut: '12:00',
-  rooms: '1',
-  guests: '1',
-  features: [
-    'washer',
-    'wifi',
-  ],
-  description: '',
-}
-
 export {
   getPositiveRandomInteger, 
   getPositiveRandomFloat, 
@@ -100,5 +85,4 @@ export {
   showSuccessMessage,
   showErrorMessage, 
   TYPES,
-  DEFAULT_FIELDS_VALUES,
 };

@@ -1,20 +1,18 @@
-import { TYPES, DEFAULT_FIELDS_VALUES } from "./util.js";
+import { TYPES } from "./util.js";
 import { getData, sendData } from "./server.js";
 import { resetMap, setMarkers, DEFAULT_CITY } from "./map.js";
 import { showSuccessMessage, showErrorMessage } from "./util.js";
 
 const form = document.querySelector('.ad-form');
 const formResetButton = form.querySelector('.ad-form__reset');
-let formTitle = form.querySelector('#title');
-let formType = form.querySelector('#type');
-let formPrice = form.querySelector('#price');
+const formType = form.querySelector('#type');
+const formPrice = form.querySelector('#price');
 const formPriceSlider = form.querySelector('.ad-form__slider');
-let formAddress = form.querySelector('#address');
-let formTimeIn = form.querySelector('#timein');
-let formTimeOut = form.querySelector('#timeout');
-let formRoomAmount = form.querySelector('#room_number');
-let formRoomCapacity = form.querySelector('#capacity');
-let formDescription = form.querySelector('#description');
+const formAddress = form.querySelector('#address');
+const formTimeIn = form.querySelector('#timein');
+const formTimeOut = form.querySelector('#timeout');
+const formRoomAmount = form.querySelector('#room_number');
+const formRoomCapacity = form.querySelector('#capacity');
 
 const pristine = new Pristine(form,
   {
@@ -166,36 +164,11 @@ form.addEventListener('submit', (e) => {
 
 // ========== Сброс формы ==========
 
-// Поля формы
-
-function resetFormFields() {
-  formTitle.value = DEFAULT_FIELDS_VALUES.title;
-  formType.value = DEFAULT_FIELDS_VALUES.type;
-  formPrice.value = DEFAULT_FIELDS_VALUES.price;
-  formPrice.min = DEFAULT_FIELDS_VALUES.price;
-  formTimeIn.value = DEFAULT_FIELDS_VALUES.timeIn;
-  formTimeOut.value = DEFAULT_FIELDS_VALUES.timeOut;
-  formRoomAmount = DEFAULT_FIELDS_VALUES.rooms;
-  formRoomCapacity = DEFAULT_FIELDS_VALUES.guests;
-  formDescription.value = DEFAULT_FIELDS_VALUES.description;
-
-  function resetFeatures() {
-    const formFeatures = form.querySelectorAll('.features__checkbox');
-
-    formFeatures.forEach((feature) => {
-      if (!DEFAULT_FIELDS_VALUES.features.includes(feature.value))
-        feature.checked = false;
-    })
-  }
-
-  resetFeatures();
-}
-
-// Форма
 function resetForm(e) {
   e.preventDefault();
 
-  resetFormFields(); 
+  form.reset();
+  formPrice.min = TYPES.flat.minPrice;
   pristine.reset();
   resetMap();
   getData(setMarkers);
