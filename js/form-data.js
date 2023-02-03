@@ -1,14 +1,20 @@
-import { TYPES } from "./util.js";
+import { TYPES, DEFAULT_FIELDS_VALUES } from "./util.js";
+import { getData, sendData } from "./server.js";
+import { resetMap, setMarkers, DEFAULT_CITY } from "./map.js";
+import { showSuccessMessage, showErrorMessage } from "./util.js";
 
 const form = document.querySelector('.ad-form');
-const formType = form.querySelector('#type');
-const formPrice = form.querySelector('#price');
+const formResetButton = form.querySelector('.ad-form__reset');
+let formTitle = form.querySelector('#title');
+let formType = form.querySelector('#type');
+let formPrice = form.querySelector('#price');
 const formPriceSlider = form.querySelector('.ad-form__slider');
-const formAddress = form.querySelector('#address');
-const formTimeIn = form.querySelector('#timein');
-const formTimeOut = form.querySelector('#timeout');
-const formRoomAmount = form.querySelector('#room_number');
-const formRoomCapacity = form.querySelector('#capacity');
+let formAddress = form.querySelector('#address');
+let formTimeIn = form.querySelector('#timein');
+let formTimeOut = form.querySelector('#timeout');
+let formRoomAmount = form.querySelector('#room_number');
+let formRoomCapacity = form.querySelector('#capacity');
+let formDescription = form.querySelector('#description');
 
 const pristine = new Pristine(form,
   {
@@ -50,7 +56,7 @@ pristine.addValidator(formPrice, checkPrice, setPriceErrorMessage, 2);
 formType.addEventListener('change', setPrice);
 formPrice.addEventListener('change', onPriceChange)
 
-// Слайдер
+// ========== Слайдер ==========
 
 noUiSlider.create(formPriceSlider, {
   range: {
@@ -61,7 +67,7 @@ noUiSlider.create(formPriceSlider, {
   step: 1,
   connect: 'lower',
   format: {
-    to: function(value) {
+    to: function (value) {
       return value.toFixed(0);
     },
     from: function (value) {
@@ -75,7 +81,11 @@ formPriceSlider.noUiSlider.on('update', () => {
   pristine.validate(formPrice);
 })
 
-formPrice.addEventListener('input', function() {
+formType.addEventListener('change', function () {
+  formPriceSlider.noUiSlider.set([formPrice.min, null])
+})
+
+formPrice.addEventListener('input', function () {
   formPriceSlider.noUiSlider.set([formPrice.value, null])
 })
 
@@ -116,7 +126,7 @@ function onCapacityChange() {
 function setRoomsErrorMessage() {
   if (formRoomAmount.value === '100' && !(formRoomCapacity.value === '0')) {
     return `100 комнат не предназначены для гостей`;
-  } else if(!(formRoomAmount.value === '100') && formRoomCapacity.value === '0') {
+  } else if (!(formRoomAmount.value === '100') && formRoomCapacity.value === '0') {
     return ``
   } else {
     return 'Слишком мало комнат для такого количества гостей';
@@ -126,15 +136,15 @@ function setRoomsErrorMessage() {
 function setGuestsErrorMessage() {
   if (formRoomAmount.value === '100' && !(formRoomCapacity.value === '0')) {
     return ``
-  } else if(!(formRoomAmount.value === '100') && formRoomCapacity.value === '0') {
+  } else if (!(formRoomAmount.value === '100') && formRoomCapacity.value === '0') {
     return `Не для гостей предназначено 100 комнат`;
-  }  else {
+  } else {
     return 'Слишком много гостей для такого количества комнат';
   }
 }
 
 pristine.addValidator(formRoomAmount, setRoomsCapacity, setRoomsErrorMessage);
-pristine.addValidator(formRoomCapacity,setRoomsCapacity, setGuestsErrorMessage);
+pristine.addValidator(formRoomCapacity, setRoomsCapacity, setGuestsErrorMessage);
 
 formRoomAmount.addEventListener('change', onRoomsChange);
 formRoomCapacity.addEventListener('change', onCapacityChange);
@@ -145,12 +155,54 @@ form.addEventListener('submit', (e) => {
   e.preventDefault();
 
   let valid = pristine.validate();
+  let formData = new FormData(this);
 
-  if(valid) {
-    console.log('Можно отправлять')
+  if (valid) {
+    sendData(showSuccessMessage, showErrorMessage, formData);
   } else {
     console.log('Нельзя отправлять')
   }
 });
+
+// ========== Сброс формы ==========
+
+// Поля формы
+
+function resetFormFields() {
+  formTitle.value = DEFAULT_FIELDS_VALUES.title;
+  formType.value = DEFAULT_FIELDS_VALUES.type;
+  formPrice.value = DEFAULT_FIELDS_VALUES.price;
+  formPrice.min = DEFAULT_FIELDS_VALUES.price;
+  formTimeIn.value = DEFAULT_FIELDS_VALUES.timeIn;
+  formTimeOut.value = DEFAULT_FIELDS_VALUES.timeOut;
+  formRoomAmount = DEFAULT_FIELDS_VALUES.rooms;
+  formRoomCapacity = DEFAULT_FIELDS_VALUES.guests;
+  formDescription.value = DEFAULT_FIELDS_VALUES.description;
+
+  function resetFeatures() {
+    const formFeatures = form.querySelectorAll('.features__checkbox');
+
+    formFeatures.forEach((feature) => {
+      if (!DEFAULT_FIELDS_VALUES.features.includes(feature.value))
+        feature.checked = false;
+    })
+  }
+
+  resetFeatures();
+}
+
+// Форма
+function resetForm(e) {
+  e.preventDefault();
+
+  resetFormFields(); 
+  pristine.reset();
+  resetMap();
+  getData(setMarkers);
+  formPriceSlider.noUiSlider.reset();
+  setAddressCoordinates(DEFAULT_CITY);
+}
+
+formResetButton.addEventListener('click', resetForm)
 
 export { setAddressCoordinates };
