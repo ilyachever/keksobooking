@@ -68,7 +68,7 @@ mainMarker
 
 // Метки объявлений
 
-const defaultMarkerGroup = L.layerGroup().addTo(map)
+const defaultMarkerGroup = L.layerGroup().addTo(map);
 
 function setMarkers(data) {
   const defaultMarker = L.marker(
@@ -97,7 +97,6 @@ function deleteMarkerGroup(markerGroup) {
 function resetMap() {
   map.setView(DEFAULT_CITY, DEFAULT_ZOOM);
   mainMarker.setLatLng(DEFAULT_CITY);
-  document.querySelector('#address').placeholder = `${DEFAULT_CITY.lat}, ${DEFAULT_CITY.lng}`;
   deleteMarkerGroup(defaultMarkerGroup);
 }
 
@@ -116,4 +115,9 @@ function onCoordinatesChange(e) {
   setAddressCoordinates(currentCoordinates);
 }
 
-export { addMap, setMarkers, resetMap }
+export { 
+  addMap, 
+  setMarkers, 
+  resetMap,
+  DEFAULT_CITY,
+}
