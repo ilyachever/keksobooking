@@ -1,7 +1,12 @@
-import { TYPES } from "./util.js";
+import { 
+  FORM_TYPES, DEFAULT_CITY, 
+  FORM_CAPACITY, 
+  showSuccessMessagePopup, 
+  showErrorMessagePopup,
+  showAlertMessage 
+} from "./util.js";
 import { getData, sendData } from "./server.js";
-import { resetMap, setMarkers, DEFAULT_CITY } from "./map.js";
-import { showSuccessMessage, showErrorMessage } from "./util.js";
+import { resetMap, setMarkers } from "./map.js";
 
 const form = document.querySelector('.ad-form');
 const formResetButton = form.querySelector('.ad-form__reset');
@@ -31,7 +36,7 @@ function setAddressCoordinates(coordinates) {
 // ========== Тип жилья, Цена за ночь ==========
 
 function setPrice() {
-  let minPrice = TYPES[this.value].minPrice;
+  let minPrice = FORM_TYPES[this.value].minPrice;
 
   formPrice.min = minPrice;
   formPrice.placeholder = minPrice;
@@ -102,15 +107,8 @@ formTimeOut.addEventListener('change', setTimeOut);
 
 // ========== Количество комнат ==========
 
-const capacityOptions = {
-  1: ['1'],
-  2: ['1', '2'],
-  3: ['1', '2', '3'],
-  100: ['0'],
-}
-
 function setRoomsCapacity() {
-  return capacityOptions[formRoomAmount.value].includes(formRoomCapacity.value);
+  return FORM_CAPACITY[formRoomAmount.value].includes(formRoomCapacity.value);
 }
 
 function onRoomsChange() {
@@ -153,12 +151,12 @@ form.addEventListener('submit', (e) => {
   e.preventDefault();
 
   let valid = pristine.validate();
-  let formData = new FormData(this);
+  let formData = new FormData(e.currentTarget);
 
   if (valid) {
-    sendData(showSuccessMessage, showErrorMessage, formData);
+    sendData(showSuccessMessagePopup, showErrorMessagePopup, formData);
   } else {
-    console.log('Нельзя отправлять')
+    showAlertMessage('Форма заполнена не полностью', 3000);
   }
 });
 
@@ -168,7 +166,7 @@ function resetForm(e) {
   e.preventDefault();
 
   form.reset();
-  formPrice.min = TYPES.flat.minPrice;
+  formPrice.min = FORM_TYPES.flat.minPrice;
   pristine.reset();
   resetMap();
   getData(setMarkers);
