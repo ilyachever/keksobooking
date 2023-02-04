@@ -1,8 +1,6 @@
+import { GET_DATA_LINK, POST_DATA_LINK } from "./util.js";
 import { filterEnable } from "./state.js";
-import { showAlertMessage, hideAlertMessage } from "./util.js";
-
-const GET_DATA_LINK = 'https://23.javascript.pages.academy/keksobooking/data';
-const POST_DATA_LINK = 'https://23.javascript.pages.academy/keksobooking';
+import { showAlertMessage } from "./util.js";
 
 async function getData(onSuccess, adsQuantity = 5, alertDelay = 3000) {
   try {
@@ -12,8 +10,7 @@ async function getData(onSuccess, adsQuantity = 5, alertDelay = 3000) {
     data.slice(0, adsQuantity).forEach((dataItem) => onSuccess(dataItem));
     filterEnable();
   } catch (error) {
-    showAlertMessage(`Возникла ошибка`);
-    setTimeout(hideAlertMessage, alertDelay);
+    showAlertMessage(`Возникла ошибка загрузки объявлений`, alertDelay);
   }
 }
 
@@ -32,8 +29,7 @@ async function sendData(onSuccess, onError, body, alertDelay = 3000) {
       onError();
     }
   } catch (error) {
-    showAlertMessage(`Возникла ошибка`);
-    setTimeout(hideAlertMessage, alertDelay);
+    showAlertMessage(`Возникла ошибка загрузки объявления`, alertDelay);
   }
 }
 

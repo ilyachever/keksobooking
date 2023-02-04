@@ -1,4 +1,4 @@
-import { TYPES } from "./util.js";
+import { FORM_TYPES } from "./util.js";
 
 // Found template of the card
 const templateCard = document.getElementById('card').content.querySelector('.popup');
@@ -33,7 +33,7 @@ function renderCard({author, offer}) {
 
   // Utils
   function getApart(item) {
-    if (TYPES[item].ru) return TYPES[item].ru;
+    if (FORM_TYPES[item].ru) return FORM_TYPES[item].ru;
   }
 
   function getFeatures(features) {
