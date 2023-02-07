@@ -1,10 +1,10 @@
-// ========== Функции ==========
+import { formButtonEnable } from "./state.js";
 
-function showAlertMessage(message, delay) {
+// Функции
+function showAlertMessage(message, delay = 3000) {
   const alertContainer = document.createElement('div');
   const alertMessage = document.createElement('p');
 
-  // Container
   alertContainer.setAttribute('id', 'alert-message');
   alertContainer.style.display = `block`;
   alertContainer.style.minWidth = `100%`;
@@ -18,14 +18,12 @@ function showAlertMessage(message, delay) {
   alertContainer.style.fontSize = `20px`;
   alertContainer.style.textAlign = `center`;
 
-  // Message
   alertMessage.style.margin = `0`;
   alertMessage.textContent = `${message}`;
 
   alertContainer.append(alertMessage);
   document.body.append(alertContainer);
 
-  // Delete after delay
   setTimeout(() => {
     alertContainer.remove();
   }, delay)
@@ -36,12 +34,14 @@ function closeMessagePopup(e) {
 
   target.remove();
   e.currentTarget.removeEventListener('click', closeMessagePopup);
+  formButtonEnable();
 }
 
 function closeMessagePopupByEsc(e) {
   if(e.key === 'Escape') {
     this.remove();
-    e.currentTarget.removeEventListener('keydown', closeMessagePopupByEsc)
+    e.currentTarget.removeEventListener('keydown', closeMessagePopupByEsc);
+    formButtonEnable();
   }
 }
 
@@ -67,7 +67,55 @@ function showErrorMessagePopup() {
   document.addEventListener('keydown', closeMessagePopupByEsc.bind(errorMessage));
 }
 
-// ========== Константы ==========
+function debounce (callback, delay = TIMEOUT_DELAY) {
+  let timeoutId;
+
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), delay);
+  };
+}
+
+// Константы 
+
+// Фильтр
+const FILTER_PRICE = {
+  low: {
+    min: 0,
+    max: 10000,
+  },
+  middle: {
+    min: 10000,
+    max: 50000,
+  },
+  high: {
+    min: 50000,
+    max: 100000,
+  }
+};
+
+const FILTER_GUESTS = {
+  low: {
+    min: 1,
+    max: 2,
+  },
+  middle: {
+    min: 2,
+    max: 5,
+  },
+  high: {
+    min: 5,
+    max: 10,
+  },
+  zero: {
+    min: 0,
+    max: 0,
+  }
+};
+
+const FILTER_DEFAULT_VALUE = 'any';
+
+const TIMEOUT_DELAY = 700;
 
 // Форма
 const FORM_TYPES = {
@@ -98,7 +146,7 @@ const FORM_CAPACITY = {
   2: ['1', '2'],
   3: ['1', '2', '3'],
   100: ['0'],
-}
+};
 
 // Карта
 const DEFAULT_CITY = {
@@ -126,10 +174,16 @@ const ICON_DEFAULT = L.icon({
 const GET_DATA_LINK = 'https://23.javascript.pages.academy/keksobooking/data';
 const POST_DATA_LINK = 'https://23.javascript.pages.academy/keksobooking';
 
+const ADS_QUANTITY = 15;
+
 export {
   showAlertMessage,
   showSuccessMessagePopup,
   showErrorMessagePopup,
+  debounce,
+  FILTER_PRICE,
+  FILTER_GUESTS,
+  FILTER_DEFAULT_VALUE,
   FORM_TYPES,
   FORM_CAPACITY,
   DEFAULT_CITY,
@@ -139,4 +193,5 @@ export {
   ICON_DEFAULT,
   GET_DATA_LINK,
   POST_DATA_LINK,
-};
+  ADS_QUANTITY,
+}
