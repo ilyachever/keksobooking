@@ -5,9 +5,11 @@ import {
   showErrorMessagePopup,
   showAlertMessage 
 } from "./util.js";
+import { resetMap, renderOffers } from "./map.js";
 import { getData, sendData } from "./server.js";
-import { resetMap, setMarkers } from "./map.js";
+import { formButtonDisable } from "./state.js";
 
+// HTML Элементы
 const form = document.querySelector('.ad-form');
 const formResetButton = form.querySelector('.ad-form__reset');
 const formType = form.querySelector('#type');
@@ -18,7 +20,9 @@ const formTimeIn = form.querySelector('#timein');
 const formTimeOut = form.querySelector('#timeout');
 const formRoomAmount = form.querySelector('#room_number');
 const formRoomCapacity = form.querySelector('#capacity');
+const filter = document.querySelector('.map__filters');
 
+// Настройка Pristine
 const pristine = new Pristine(form,
   {
     classTo: 'ad-form__element',
@@ -27,14 +31,12 @@ const pristine = new Pristine(form,
   }
 );
 
-// ========== Адресс ==========
-
+// Адресс
 function setAddressCoordinates(coordinates) {
   formAddress.value = `${coordinates.lat}, ${coordinates.lng}`;
 }
 
-// ========== Тип жилья, Цена за ночь ==========
-
+// Тип жилья, Цена за ночь 
 function setPrice() {
   let minPrice = FORM_TYPES[this.value].minPrice;
 
@@ -59,8 +61,7 @@ pristine.addValidator(formPrice, checkPrice, setPriceErrorMessage, 2);
 formType.addEventListener('change', setPrice);
 formPrice.addEventListener('change', onPriceChange)
 
-// ========== Слайдер ==========
-
+// Слайдер 
 noUiSlider.create(formPriceSlider, {
   range: {
     min: 0,
@@ -92,8 +93,7 @@ formPrice.addEventListener('input', function () {
   formPriceSlider.noUiSlider.set([formPrice.value, null])
 })
 
-// ========== Время заезда и выезда ==========
-
+// Время заезда и выезда 
 function setTimeIn() {
   formTimeOut.value = formTimeIn.value;
 }
@@ -105,8 +105,7 @@ function setTimeOut() {
 formTimeIn.addEventListener('change', setTimeIn);
 formTimeOut.addEventListener('change', setTimeOut);
 
-// ========== Количество комнат ==========
-
+// Количество комнат 
 function setRoomsCapacity() {
   return FORM_CAPACITY[formRoomAmount.value].includes(formRoomCapacity.value);
 }
@@ -145,33 +144,36 @@ pristine.addValidator(formRoomCapacity, setRoomsCapacity, setGuestsErrorMessage)
 formRoomAmount.addEventListener('change', onRoomsChange);
 formRoomCapacity.addEventListener('change', onCapacityChange);
 
-// ========== Обработчик формы ==========
-
-form.addEventListener('submit', (e) => {
+// Отправка формы 
+function submitForm(e) {
   e.preventDefault();
 
   let valid = pristine.validate();
   let formData = new FormData(e.currentTarget);
 
   if (valid) {
+    formButtonDisable();
     sendData(showSuccessMessagePopup, showErrorMessagePopup, formData);
+    resetForm(e);
   } else {
     showAlertMessage('Форма заполнена не полностью', 3000);
   }
-});
+}
 
-// ========== Сброс формы ==========
+form.addEventListener('submit', submitForm)
 
+// Сброс формы 
 function resetForm(e) {
   e.preventDefault();
 
   form.reset();
-  formPrice.min = FORM_TYPES.flat.minPrice;
+  filter.reset();
   pristine.reset();
-  resetMap();
-  getData(setMarkers);
   formPriceSlider.noUiSlider.reset();
+  formPrice.min = FORM_TYPES.flat.minPrice;
   setAddressCoordinates(DEFAULT_CITY);
+  resetMap();
+  getData(renderOffers);
 }
 
 formResetButton.addEventListener('click', resetForm)
