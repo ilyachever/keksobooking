@@ -1,12 +1,11 @@
 import { FORM_TYPES } from "./util.js";
 
-// Found template of the card
 const templateCard = document.getElementById('card').content.querySelector('.popup');
 
 function renderCard({author, offer}) {
   const card = templateCard.cloneNode(true);
 
-  // Found HTML elements
+  // HTML элементы
   const offerTitle = card.querySelector('.popup__title');
   const offerAddress = card.querySelector('.popup__text--address');
   const offerPrice = card.querySelector('.popup__text--price');
@@ -19,7 +18,7 @@ function renderCard({author, offer}) {
   const offerPhotosContainer = card.querySelector('.popup__photos');
   const offerAvatar = card.querySelector('.popup__avatar');
 
-  // Create a card
+  // Карточка
   offerTitle.textContent = isDataReceived(offer.title, offerTitle);
   offerAddress.textContent = isDataReceived(offer.address, offerAddress);
   offerPrice.textContent = `${isDataReceived(offer.price, offerPrice)} ₽/ночь`;
@@ -31,7 +30,7 @@ function renderCard({author, offer}) {
   offerPhotosContainer.innerHTML = isDataReceived(getPhotos(offer.photos), offerPhotosContainer);
   offerAvatar.src = isDataReceived(author.avatar, offerAvatar);
 
-  // Utils
+  // Вспомогательные функции
   function getApart(item) {
     if (FORM_TYPES[item].ru) return FORM_TYPES[item].ru;
   }
