@@ -29,9 +29,19 @@ function filterEnable() {
   filterFeatures.disabled = false;
 }
 
+function formButtonDisable() {
+  form.querySelector('.ad-form__submit').disabled = true;
+}
+
+function formButtonEnable() {
+  form.querySelector('.ad-form__submit').disabled = false;
+}
+
 export { 
   formDisable, 
   formEnable, 
   filterDisable, 
-  filterEnable 
+  filterEnable,
+  formButtonDisable,
+  formButtonEnable,
 }
