@@ -1,20 +1,22 @@
-import { GET_DATA_LINK, POST_DATA_LINK } from "./util.js";
+import { GET_DATA_LINK, POST_DATA_LINK, ADS_QUANTITY } from "./util.js";
 import { filterEnable } from "./state.js";
 import { showAlertMessage } from "./util.js";
 
-async function getData(onSuccess, adsQuantity = 5, alertDelay = 3000) {
+async function getData(onSuccess, adsQuantity = ADS_QUANTITY) {
   try {
     const dataResponse = await fetch(GET_DATA_LINK);
-    const data = await dataResponse.json();
+    let data = await dataResponse.json();
 
-    data.slice(0, adsQuantity).forEach((dataItem) => onSuccess(dataItem));
     filterEnable();
+
+    onSuccess(data.slice(0, adsQuantity));
+
   } catch (error) {
-    showAlertMessage(`Возникла ошибка загрузки объявлений`, alertDelay);
+    showAlertMessage(`Возникла ошибка загрузки объявлений`);
   }
 }
 
-async function sendData(onSuccess, onError, body, alertDelay = 3000) {
+async function sendData(onSuccess, onError, body) {
   try {
     const data = await fetch(POST_DATA_LINK,
       {
@@ -29,7 +31,7 @@ async function sendData(onSuccess, onError, body, alertDelay = 3000) {
       onError();
     }
   } catch (error) {
-    showAlertMessage(`Возникла ошибка загрузки объявления`, alertDelay);
+    showAlertMessage(`Возникла ошибка загрузки объявления`);
   }
 }
 
