@@ -1,12 +1,12 @@
 import { DEFAULT_CITY, DEFAULT_ZOOM, DEFAULT_ROUND, ICON_MAIN, ICON_DEFAULT } from "./util.js";
-import { formEnable } from "./state.js"
+import { filterDisable, formDisable, formEnable } from "./state.js"
 import { setAddressCoordinates } from "./form-data.js";
+import { getData } from "./server.js";
 import renderCard from "./card.js";
 
 const mapContainer = document.querySelector('#map-canvas');
 
-// ========== Настройки OpenStreetMaps  ==========
-
+// Настройки OpenStreetMaps 
 const openStreetMap = {
   url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   settings: {
@@ -14,24 +14,27 @@ const openStreetMap = {
   },
 };
 
-// ========== Настройки карты ==========
+// Настройки карты
 const map = L.map(mapContainer);
 
 // Добавление карты
-
 function addMap() {
-  map
-    .on('load', formEnable, setAddressCoordinates(DEFAULT_CITY))
-    .setView(DEFAULT_CITY, DEFAULT_ZOOM);
+  map.on('load', formEnable, setAddressCoordinates(DEFAULT_CITY)).setView(DEFAULT_CITY, DEFAULT_ZOOM);
 
   // openStreetMap
   L.tileLayer(openStreetMap.url, openStreetMap.settings).addTo(map);
 }
 
-// ========== Настройки отображения меток ==========
+function initMap() {
+  formDisable();
+  filterDisable();
+  addMap();
+}
+
+// Блокировка формы и фильтров, запуск карты
+initMap();
 
 // Главная метка
-
 const mainMarker = L.marker(
   DEFAULT_CITY,
   {
@@ -39,46 +42,6 @@ const mainMarker = L.marker(
     icon: ICON_MAIN,
   },
 )
-
-mainMarker
-  .addTo(map)
-  .on('moveend', onCoordinatesChange);
-
-// Метки объявлений
-
-const defaultMarkerGroup = L.layerGroup().addTo(map);
-
-function setMarkers(data) {
-  const defaultMarker = L.marker(
-    data.location,
-    {
-      draggable: false,
-      icon: ICON_DEFAULT,
-    }
-  )
-
-  defaultMarker
-    .addTo(defaultMarkerGroup)
-    .bindPopup(renderCard(data), {
-      keepInView: true,
-    })
-}
-
-function deleteMarkerGroup(markerGroup) {
-  markerGroup.clearLayers();
-}
-
-// ========== Настройки карты ==========
-
-// Сброс карты
-
-function resetMap() {
-  map.setView(DEFAULT_CITY, DEFAULT_ZOOM);
-  mainMarker.setLatLng(DEFAULT_CITY);
-  deleteMarkerGroup(defaultMarkerGroup);
-}
-
-// ========== Дополнительные функции ==========
 
 function onCoordinatesChange(e) {
   let { lat, lng } = e.target.getLatLng();
@@ -93,8 +56,50 @@ function onCoordinatesChange(e) {
   setAddressCoordinates(currentCoordinates);
 }
 
-export { 
-  addMap, 
-  setMarkers, 
+mainMarker.addTo(map).on('moveend', onCoordinatesChange);
+
+// Метки объявлений
+const adMarkerGroup = L.layerGroup().addTo(map);
+
+function setMarkers(dataItem) {
+  const defaultMarker = L.marker(
+    dataItem.location,
+    {
+      draggable: false,
+      icon: ICON_DEFAULT,
+    }
+  )
+
+  defaultMarker.addTo(adMarkerGroup).bindPopup(renderCard(dataItem), {keepInView: true})
+}
+
+function deleteAdMarkerGroup() {
+  adMarkerGroup.clearLayers();
+}
+
+function renderOffers() {
+  function render(data) {
+    data.forEach((dataItem) => {
+      setMarkers(dataItem);
+    })
+  }
+
+  getData(render);
+}
+
+// Отрисовка меток
+renderOffers();
+
+// Сброс карты
+function resetMap() {
+  map.setView(DEFAULT_CITY, DEFAULT_ZOOM);
+  mainMarker.setLatLng(DEFAULT_CITY);
+  deleteAdMarkerGroup();
+}
+
+export {
+  setMarkers,
+  renderOffers,
   resetMap,
+  deleteAdMarkerGroup,
 }
