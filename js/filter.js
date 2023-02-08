@@ -12,7 +12,7 @@ const filterFeatures = filter.querySelectorAll('.map__checkbox');
 
 function checkFilterType(dataItem) {
   const value = filterType.value;
-  
+
   return value === dataItem.offer.type || value === FILTER_DEFAULT_VALUE;
 }
 
@@ -69,16 +69,16 @@ function checkFilterFeatures(dataItem) {
 
 function renderFiltredOffers() {
   function filterOffers(data) {
-    data.forEach((dataItem) => {
+    for (let i = 0; i < data.length; i++) {
       if (
-      checkFilterType(dataItem) && 
-      checkFilterPrice(dataItem) && 
-      checkFilterRooms(dataItem) && 
-      checkFilterGuests(dataItem) &&
-      checkFilterFeatures(dataItem)) {
-        setMarkers(dataItem);
+        checkFilterType(data[i]) &&
+        checkFilterPrice(data[i]) &&
+        checkFilterRooms(data[i]) &&
+        checkFilterGuests(data[i]) &&
+        checkFilterFeatures(data[i])) {
+          setMarkers(data[i]);
       }
-    });
+    }
   }
 
   deleteAdMarkerGroup();
