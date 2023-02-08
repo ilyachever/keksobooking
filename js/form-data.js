@@ -38,7 +38,6 @@ const pristine = new Pristine(form,
 );
 
 // Аватар
-// Фотографии Жилья
 avatarImageInput.addEventListener('change', (e) => {
   const file = e.currentTarget.files[0];
   const fileName = file.name.toLowerCase();
