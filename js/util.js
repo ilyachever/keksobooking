@@ -156,7 +156,7 @@ const DEFAULT_CITY = {
   lng: 139.75175,
 };
 
-const DEFAULT_ZOOM = 10;
+const DEFAULT_ZOOM = 12;
 
 const DEFAULT_ROUND = 5;
 
@@ -176,7 +176,7 @@ const ICON_DEFAULT = L.icon({
 const GET_DATA_LINK = 'https://23.javascript.pages.academy/keksobooking/data';
 const POST_DATA_LINK = 'https://23.javascript.pages.academy/keksobooking';
 
-const ADS_QUANTITY = 15;
+const ADS_QUANTITY = 50;
 
 export {
   showAlertMessage,
