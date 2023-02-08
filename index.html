@@ -199,10 +199,13 @@
               name="images" 
               class="ad-form__input visually-hidden" 
               data-pristine-required-message="Обязательное поле"
+              accept="image/png, image/jpeg"
               required>
               <label for="images" class="ad-form__drop-zone">Загрузить<br>фото...</label>
             </div>
-            <div class="ad-form__photo"></div>
+            <div class="ad-form__photo-container">
+              <img class="ad-form__photo" aria-hidden="true">
+            </div>
           </div>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--submit">
