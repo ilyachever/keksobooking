@@ -1,6 +1,8 @@
 import { 
-  FORM_TYPES, DEFAULT_CITY, 
+  FORM_TYPES, 
+  DEFAULT_CITY, 
   FORM_CAPACITY, 
+  FILE_TYPES,
   showSuccessMessagePopup, 
   showErrorMessagePopup,
   showAlertMessage 
@@ -21,6 +23,10 @@ const formTimeOut = form.querySelector('#timeout');
 const formRoomAmount = form.querySelector('#room_number');
 const formRoomCapacity = form.querySelector('#capacity');
 const filter = document.querySelector('.map__filters');
+const avatarImageInput = form.querySelector('.ad-form-header__input');
+const avatarImagePreview = form.querySelector('.ad-form-header__preview img');
+const apartamentImageInput = form.querySelector('.ad-form__input');
+const apartamentImagePreview = form.querySelector('.ad-form__photo');
 
 // Настройка Pristine
 const pristine = new Pristine(form,
@@ -30,6 +36,19 @@ const pristine = new Pristine(form,
     errorTextParent: 'ad-form__element',
   }
 );
+
+// Аватар
+// Фотографии Жилья
+avatarImageInput.addEventListener('change', (e) => {
+  const file = e.currentTarget.files[0];
+  const fileName = file.name.toLowerCase();
+
+  const matches = FILE_TYPES.some((type) => fileName.endsWith(type));
+
+  if (matches) {
+    avatarImagePreview.src = URL.createObjectURL(file);
+  }
+})
 
 // Адресс
 function setAddressCoordinates(coordinates) {
@@ -144,6 +163,18 @@ pristine.addValidator(formRoomCapacity, setRoomsCapacity, setGuestsErrorMessage)
 formRoomAmount.addEventListener('change', onRoomsChange);
 formRoomCapacity.addEventListener('change', onCapacityChange);
 
+// Фотографии Жилья
+apartamentImageInput.addEventListener('change', (e) => {
+  const file = e.currentTarget.files[0];
+  const fileName = file.name.toLowerCase();
+
+  const matches = FILE_TYPES.some((type) => fileName.endsWith(type));
+
+  if (matches) {
+    apartamentImagePreview.src = URL.createObjectURL(file);
+  }
+})
+
 // Отправка формы 
 function submitForm(e) {
   e.preventDefault();
@@ -155,6 +186,7 @@ function submitForm(e) {
     formButtonDisable();
     sendData(showSuccessMessagePopup, showErrorMessagePopup, formData);
     resetForm(e);
+    pristine.reset();
   } else {
     showAlertMessage('Форма заполнена не полностью', 3000);
   }
