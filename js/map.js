@@ -79,9 +79,9 @@ function deleteAdMarkerGroup() {
 
 function renderOffers() {
   function render(data) {
-    data.forEach((dataItem) => {
-      setMarkers(dataItem);
-    })
+    for (let i = 0; i < data.length; i++) {
+      setMarkers(data[i]);
+    }
   }
 
   getData(render);
