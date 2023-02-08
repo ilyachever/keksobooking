@@ -161,13 +161,13 @@ const DEFAULT_ZOOM = 10;
 const DEFAULT_ROUND = 5;
 
 const ICON_MAIN = L.icon({
-  iconUrl: '../img/main-pin.svg',
+  iconUrl: './img/main-pin.svg',
   iconSize: [52, 52],
   iconAnchor: [26, 52],
 });
 
 const ICON_DEFAULT = L.icon({
-  iconUrl: '../img/pin.svg',
+  iconUrl: './img/pin.svg',
   iconSize: [40, 40],
   iconAnchor: [20, 40],
 });
