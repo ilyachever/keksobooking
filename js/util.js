@@ -148,6 +148,8 @@ const FORM_CAPACITY = {
   100: ['0'],
 };
 
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
+
 // Карта
 const DEFAULT_CITY = {
   lat: 35.69034,
@@ -186,6 +188,7 @@ export {
   FILTER_DEFAULT_VALUE,
   FORM_TYPES,
   FORM_CAPACITY,
+  FILE_TYPES,
   DEFAULT_CITY,
   DEFAULT_ZOOM,
   DEFAULT_ROUND,
