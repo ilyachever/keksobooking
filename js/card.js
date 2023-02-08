@@ -2,7 +2,7 @@ import { FORM_TYPES } from "./util.js";
 
 const templateCard = document.getElementById('card').content.querySelector('.popup');
 
-function renderCard({author, offer}) {
+function renderCard({ author, offer }) {
   const card = templateCard.cloneNode(true);
 
   // HTML элементы
